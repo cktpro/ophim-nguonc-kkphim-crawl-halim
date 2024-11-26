@@ -10,6 +10,7 @@ set_time_limit(0);
 define('CRAWL_OPHIM_URL', plugin_dir_url(__FILE__));
 define('CRAWL_OPHIM_PATH', plugin_dir_path(__FILE__));
 define('CRAWL_OPHIM_PATH_SCHEDULE_JSON', CRAWL_OPHIM_PATH . 'schedule.json');
+define('CRAWL_OPHIM_PATH_SOURCE_JSON', CRAWL_OPHIM_PATH . 'schedule_source.json');
 require_once CRAWL_OPHIM_PATH . 'constant.php';
 
 function crawl_tools_script()

@@ -7,6 +7,7 @@
 
 ## CHANGELOGS
   - Update 26/11/2024
+    + Add crawl kkphim
     + Fix link embed
   - Update 13/07/2024
     + Add crawl Nguonc
