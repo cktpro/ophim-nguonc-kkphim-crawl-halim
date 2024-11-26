@@ -1,9 +1,9 @@
 # PLUGINS CRAWL OPHIM AND NGUONC
   - Test trên bản Halimthemes 5.5.4 Nulled
 
-![Alt text](screenShort1.png?raw=true "Image Demo")
+![Alt text](screenShort1.PNG?raw=true "Image Demo")
 
-![Alt text](screenShort2.png?raw=true "Image Demo")
+![Alt text](screenShort2.PNG?raw=true "Image Demo")
 
 ## CHANGELOGS
   - Update 26/11/2024
