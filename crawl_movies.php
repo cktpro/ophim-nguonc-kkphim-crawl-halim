@@ -68,12 +68,14 @@ function crawl_tools()
 										Cấu hình crontab: <code><i style="color:blueviolet">*/10 * * * *</i> cd <i style="color:blueviolet">/path/to/</i>wp-content/plugins/crawl_ophim_halimthemes/ && php -q schedule.php <i style="color:blueviolet">{secret_key}</i></code>
 									</p>
 									<p>
-										Ví dụ:
+										Đới với AAPanel:
 										<br />
-										Mỗi 5 phút: <code>*/5 * * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
-										<br />
-										Mỗi 10 phút: <code>*/10 * * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
+										Truy cập vào AAPanel Server -> Chọn mục Cron -> Chọn Add Task -> Dán dòng lệnh dưới đây vào phần Script content <br/>
+										<code> cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
 									</p>
+									<p>Đối với Hocvps hoặc các control panel khác: <br/>Mở terminal nhập <code>EDITOR=nano crontab -e</code> rồi dán dòng lệnh bên dưới vào -> Nhấn Ctrl+O Enter lưu lại -> Ctrl+X để thoát <br/>
+									 Crawl vào lúc 2h00 mỗi ngày: <code>0 2 * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
+								</p>
 								</div>
 							</div>
 						</div>
@@ -235,11 +237,12 @@ function crawl_tools()
 					<div class="crawl_page">
 						<div class="postbox">
 							<div class="inside">
-								Ophim1.CC là website dữ liệu phim miễn phí vĩnh viễn. Cập nhật nhanh, chất lượng cao, ổn định và lâu dài. Tốc độ phát cực nhanh với đường truyền băng thông cao, đảm bảo đáp ứng được lượng xem phim trực tuyến lớn. Đồng thời giúp nhà phát triển website phim giảm thiểu chi phí của các dịch vụ lưu trữ và stream. <br />
+								Crawl phim tool là plugin crawl phim từ 3 nguồn kkphim,nguonc,ophim.<br />
 								- Hàng ngày chạy tools tầm 10 đến 20 pages đầu (tùy số lượng phim được cập nhật trong ngày) để update tập mới hoặc thêm phim mới!<br />
+								- Hạn chế crawl nhiều page một lần để tránh lỗi không mong muốn <br/>
 								- Trộn link vài lần để thay đổi thứ tự crawl & update. Giúp tránh việc quá giống nhau về content của các website!<br />
-								- API được cung cấp miễn phí: <a href="https://ophim1.cc/api-document" target="_blank">https://ophim1.cc/api-document</a> <br />
-								- Tham gia trao đổi tại: <a href="https://t.me/+QMfjBOtNpkZmNTc1" target="_blank">https://t.me/+QMfjBOtNpkZmNTc1</a> <br />
+								- API được cung cấp miễn phí: <a href="https://ophim1.cc/api-document" target="_blank">https://ophim1.cc/api-document</a>  |  <a href="https://phim.nguonc.com/api-document" target="_blank">https://phim.nguonc.com/api-document</a>  |  <a href="https://kkphim.vip/help/help.html" target="_blank">https://kkphim.vip/help/help.html</a> <br />
+								- Mua tool hoặc có vấn đề cần giải đáp.Vui lòng liên hệ: <a href="https://t.me/roxone9" target="_blank">https://t.me/roxone9</a> <br />
 							</div>
 						</div>
 					</div>
