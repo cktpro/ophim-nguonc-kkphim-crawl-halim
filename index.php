@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: Crawl OPHIM1.CC
- * Description: Crawl + Update Dữ liệu từ OPhim1.CC (WP - Halimthemes - 5.5.4)
- * Version: 1.2.0
- * Author: Phantom0803@Ophim1.Cc
- * Author URI: https://ophim1.cc/
+ * Plugin Name: Crawl Phim Tool
+ * Description: Crawl + Update Dữ liệu từ OPhim1.CC KKPhim.vip Phim.Nguonc.com (WP - Halimthemes - 5.5.4)
+ * Version: 1.2.1
+ * Author: roxone9
+ * Author URI: https://t.me/roxone9
  */
 set_time_limit(0);
 define('CRAWL_OPHIM_URL', plugin_dir_url(__FILE__));
