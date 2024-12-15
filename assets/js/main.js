@@ -38,6 +38,13 @@ jQuery(function ($) {
   const inputSearch = $("input[name=key_search_nguonc]");
   const buttonSearchMoviesNguonc = $("div#search_movies_nguonc");
   // End Nguonc
+<<<<<<< HEAD
+   // Kkphimn
+   const buttonGetListMoviesKKphim = $("div#get_list_movies_kkphim");
+   const buttonCrawlMoviesKKphim = $("div#crawl_movies_kkphim");
+   // End KKphim
+=======
+>>>>>>> main
   const divMsg = $("div#msg");
   const divMsgText = $("p#msg_text");
   const textArealistMovies = $("textarea#result_list_movies");
@@ -92,17 +99,28 @@ jQuery(function ($) {
     });
   });
   // End button search movie nguonc
+<<<<<<< HEAD
+  // button get list movie nguonc
+=======
     // button get list movie nguonc
+>>>>>>> main
   buttonGetListMoviesNguonc.on("click", () => {
     divMsg.show(300);
     textArealistMovies.show(300);
     crawl_page_callback_nguonc(inputPageFrom.val());
   });
+<<<<<<< HEAD
+  // end button get list movie nguonc
+  // function crawl_page_callback_nguonc
+  const crawl_page_callback_nguonc = (currentPage) => {
+     var urlPageCrawl = `https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${currentPage}`;
+=======
     // end button get list movie nguonc
 
   // function crawl_page_callback_nguonc
   const crawl_page_callback_nguonc = (currentPage) => {
      var urlPageCrawl = `https://phim.nguonc.com/api/films/the-loai/hoat-hinh?page=${currentPage}`;
+>>>>>>> main
     if (currentPage < inputPageTo.val()) {
       divMsgText.html("Done!");
       buttonCrawlMovies.show(300);
@@ -131,6 +149,47 @@ jQuery(function ($) {
     });
   };
     //end function crawl_page_callback_nguonc
+<<<<<<< HEAD
+  // button get list movie kkphim
+  buttonGetListMoviesKKphim.on("click", () => {
+    divMsg.show(300);
+    textArealistMovies.show(300);
+    crawl_page_callback_kkphim(inputPageFrom.val());
+  });
+  // end button get list movie kkphim
+      // function crawl_page_callback_kkphim
+      const crawl_page_callback_kkphim = (currentPage) => {
+        var urlPageCrawl = `https://phimapi.com/danh-sach/phim-moi-cap-nhat?page=${currentPage}`;
+       if (currentPage < inputPageTo.val()) {
+         divMsgText.html("Done!");
+         buttonCrawlMovies.show(300);
+         return false;
+       }
+       divMsgText.html(`Crawl KKPhim Page: ${urlPageCrawl}`);
+       $.ajax({
+         url: ajaxurl,
+         type: "POST",
+         data: {
+           action: "crawl_ophim_page_kkphim",
+           url: urlPageCrawl,
+         },
+         beforeSend: function () {
+           buttonGetListMoviesKKphim.hide(300);
+         },
+         success: function (res) {
+           let currentList = textArealistMovies.val();
+           if (currentList != "") currentList += "\n" + res;
+           else currentList += res;
+    
+           textArealistMovies.val(currentList);
+           currentPage--;
+           crawl_page_callback_kkphim(currentPage);
+         },
+       });
+     };
+       //end function crawl_page_callback_kkphim
+=======
+>>>>>>> main
   const crawl_page_callback = (currentPage) => {
     var urlPageCrawl = `https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=${currentPage}`;
 
@@ -165,7 +224,97 @@ jQuery(function ($) {
   var inputFilterType = [];
   var inputFilterCategory = [];
   var inputFilterCountry = [];
+<<<<<<< HEAD
+// button crawl movide  kkphim
+buttonCrawlMoviesKKphim.on("click", () => {
+  divMsg.show(300);
+  divMsgCrawlSuccess.show(300);
+  divMsgCrawlError.show(300);
+
+  $("input[name='filter_type[]']:checked").each(function () {
+    inputFilterType.push($(this).val());
+  });
+  $("input[name='filter_category[]']:checked").each(function () {
+    inputFilterCategory.push($(this).val());
+  });
+  $("input[name='filter_country[]']:checked").each(function () {
+    inputFilterCountry.push($(this).val());
+  });
+
+  crawl_movies_kkphim(false);
+});
+// end button crawl movide kkphim
+// function crawl movies kkphim
+const crawl_movies_kkphim = () => {
+  var listLink = textArealistMovies.val();
+  listLink = listLink.split("\n");
+  let linkCurrent = listLink.shift();
+  if (linkCurrent == "") {
+    divMsgText.html(`Crawl Done!`);
+    return false;
+  }
+  listLink = listLink.join("\n");
+  textArealistMovies.val(listLink);
+  divMsgText.html(`Crawl KKPhim Movies: <b>${linkCurrent}</b>`);
+
+  $.ajax({
+    url: ajaxurl,
+    type: "POST",
+    data: {
+      action: "crawl_kkphim_movies",
+      url: linkCurrent,
+      filterType: inputFilterType,
+      filterCategory: inputFilterCategory,
+      filterCountry: inputFilterCountry,
+    },
+    beforeSend: function () {
+      buttonCrawlMoviesKKphim.hide(300);
+      buttonRollMovies.hide(300);
+      
+    },
+    success: function (res) {
+      let data = JSON.parse(res);
+      if (data.status) {
+        let currentList = textAreaResultSuccess.val();
+        if (currentList != "") currentList += "\n" + linkCurrent;
+        else currentList += linkCurrent;
+        textAreaResultSuccess.val(currentList);
+      } else {
+        let currentList = textAreaResultError.val();
+        if (currentList != "") currentList += "\n" + linkCurrent;
+        else currentList += linkCurrent;
+        textAreaResultError.val(currentList + "=====>>" + data.msg);
+      }
+
+      var wait_timeout = 1000;
+      if (data.wait) {
+        let timeout_from = $("input[name=timeout_from]").val();
+        let timeout_to = $("input[name=timeout_to]").val();
+        let maximum = Math.max(timeout_from, timeout_to);
+        let minimum = Math.min(timeout_from, timeout_to);
+        wait_timeout = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+      }
+      divMsgText.html(`Wait timeout ${wait_timeout}ms`);
+      setTimeout(() => {
+        crawl_movies_kkphim();
+      }, wait_timeout);
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      textAreaResultError.val("Thất bại")
+      let currentList = textAreaResultError.val();
+      if (currentList != "") currentList += "\n" + linkCurrent;
+      else currentList += linkCurrent;
+      textAreaResultError.val(currentList);
+
+      crawl_movies_kkphim();
+    },
+  });
+};
+// end function crawl movies kkphinm
+// button crawl movide  nguonc
+=======
 // button crawl movide 
+>>>>>>> main
 buttonCrawlMoviesNguonc.on("click", () => {
   divMsg.show(300);
   divMsgCrawlSuccess.show(300);
@@ -246,7 +395,11 @@ const crawl_movies_nguonc = () => {
       else currentList += linkCurrent;
       textAreaResultError.val(currentList);
 
+<<<<<<< HEAD
+      crawl_movies_nguonc();
+=======
       crawl_movies();
+>>>>>>> main
     },
   });
 };
@@ -408,7 +561,10 @@ const crawl_movies_nguonc = () => {
       },
     });
   })
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
   $("#crawl_ophim_schedule_enable").on("click", (e) => {
     let enable = $("#crawl_ophim_schedule_enable").is(":checked");
     $.ajax({
@@ -424,6 +580,26 @@ const crawl_movies_nguonc = () => {
       },
     });
   })
+<<<<<<< HEAD
+    $("#save_crawl_auto").on("click", (e) => {
+    // let enable = $("#crawl_ophim_schedule_enable").is(":checked");
+    let select_source = $('input[name="crawl_ophim_radio"]:checked').val()
+    $.ajax({
+      url: ajaxurl,
+      type: "POST",
+      data: {
+        action: "crawl_ophim_schedule_select",
+        select_source
+      },
+      success: function (res) {
+        alert("Lưu thành công!");
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+      },
+    });
+  })
+=======
+>>>>>>> main
   $("#save_crawl_ophim_schedule_secret").on("click", (e) => {
     let secret_key = $("input[name='crawl_ophim_schedule_secret']").val();
     $.ajax({

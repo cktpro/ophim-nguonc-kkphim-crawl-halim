@@ -1,11 +1,24 @@
 # PLUGINS CRAWL OPHIM AND NGUONC
   - Test trên bản Halimthemes 5.5.4 Nulled
 
+<<<<<<< HEAD
+![Alt text](screenShort1.PNG?raw=true "Image Demo")
+
+![Alt text](screenShort2.PNG?raw=true "Image Demo")
+
+## CHANGELOGS
+  - Update 26/11/2024
+    + Add crawl kkphim
+    + Fix link embed
+  - Update 13/07/2024
+    + Add crawl Nguonc
+=======
 ![Alt text](Screenshot-2023-04-08-141930.png?raw=true "Image Demo")
 
 ![Alt text](Screenshot-2023-04-08-141958.png?raw=true "Image Demo")
 
 ## CHANGELOGS
+>>>>>>> main
   - Update 13/04/2023
     + Fix định dạng trailer
   - Update 08/04/2023
