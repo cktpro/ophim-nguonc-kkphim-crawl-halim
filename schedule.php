@@ -55,13 +55,12 @@ function Crawl_Nguonc($crawl_ophim_settings)
 				return;
 			}
 			// $result = crawl_ophim_page_handle(API_DOMAIN . "/danh-sach/phim-moi-cap-nhat?page=$i");
-			$result = crawl_ophim_page_handle_nguonc(API_NGUONC . "/api/films/phim-moi-cap-nhat?page=$i");
-
+			$result = crawl_ophim_page_handle_nguonc(API_NGUONC . "/api/films/the-loai/hoat-hinh?page=$i");
 			$result = explode("\n", $result);
 			$listMovies = array_merge($listMovies, $result);
 		}
 		shuffle($listMovies);
-
+		
 		$countMovies = count($listMovies);
 		$countDone = 0;
 		$countStatus = array(0, 0, 0, 0, 0);
@@ -78,7 +77,6 @@ function Crawl_Nguonc($crawl_ophim_settings)
 			$url 								= explode('|', $data_post)[0];
 			$ophim_id 					= explode('|', $data_post)[1];
 			$ophim_update_time 	= explode('|', $data_post)[2];
-
 			$result = crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $crawl_ophim_settings->filterType, $crawl_ophim_settings->filterCategory, $crawl_ophim_settings->filterCountry);
 			$result = json_decode($result);
 			if ($result->schedule_code == SCHEDULE_CRAWLER_TYPE_ERROR) write_log(sprintf("ERROR: %s ==>>> %s", $url, $result->msg));

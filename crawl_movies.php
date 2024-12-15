@@ -70,12 +70,12 @@ function crawl_tools()
 									<p>
 										Đới với AAPanel:
 										<br />
-										Truy cập vào AAPanel Server -> Chọn mục Cron -> Chọn Add Task -> Dán dòng lệnh dưới đây vào phần Script content <br/>
+										Truy cập vào AAPanel Server -> Chọn mục Cron -> Chọn Add Task -> Dán dòng lệnh dưới đây vào phần Script content <br />
 										<code> cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
 									</p>
-									<p>Đối với Hocvps hoặc các control panel khác: <br/>Mở terminal nhập <code>EDITOR=nano crontab -e</code> rồi dán dòng lệnh bên dưới vào -> Nhấn Ctrl+O Enter lưu lại -> Ctrl+X để thoát <br/>
-									 Crawl vào lúc 2h00 mỗi ngày: <code>0 2 * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
-								</p>
+									<p>Đối với Hocvps hoặc các control panel khác: <br />Mở terminal nhập <code>EDITOR=nano crontab -e</code> rồi dán dòng lệnh bên dưới vào -> Nhấn Ctrl+O Enter lưu lại -> Ctrl+X để thoát <br />
+										Crawl vào lúc 2h00 mỗi ngày: <code>0 2 * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
+									</p>
 								</div>
 							</div>
 						</div>
@@ -99,19 +99,19 @@ function crawl_tools()
 								<div class="inside">
 
 									<b>Chọn nguồn phim để auto :</b>
-									<label> 
+									<label>
 										<input type="radio" class="wppd-ui-toggle" name="crawl_ophim_radio"
 											value="ophim"
 											<?php echo (json_decode(file_get_contents(CRAWL_OPHIM_PATH_SOURCE_JSON))->enable_ophim === true) ? 'checked' : ''; ?>> OPhim
 
 									</label>
-									<label> 
+									<label>
 										<input type="radio" class="wppd-ui-toggle" name="crawl_ophim_radio"
 											value="kkphim"
 											<?php echo (json_decode(file_get_contents(CRAWL_OPHIM_PATH_SOURCE_JSON))->enable_kkphim === true) ? 'checked' : ''; ?>> KKPhim
 
 									</label>
-									<label> 
+									<label>
 										<input type="radio" class="wppd-ui-toggle" name="crawl_ophim_radio"
 											value="nguonc"
 											<?php echo (json_decode(file_get_contents(CRAWL_OPHIM_PATH_SOURCE_JSON))->enable_nguonc === true) ? 'checked' : ''; ?>> Nguonc
@@ -242,9 +242,9 @@ function crawl_tools()
 							<div class="inside">
 								Crawl phim tool là plugin crawl phim từ 3 nguồn kkphim,nguonc,ophim.<br />
 								- Hàng ngày chạy tools tầm 10 đến 20 pages đầu (tùy số lượng phim được cập nhật trong ngày) để update tập mới hoặc thêm phim mới!<br />
-								- Hạn chế crawl nhiều page một lần để tránh lỗi không mong muốn <br/>
+								- Hạn chế crawl nhiều page một lần để tránh lỗi không mong muốn <br />
 								- Trộn link vài lần để thay đổi thứ tự crawl & update. Giúp tránh việc quá giống nhau về content của các website!<br />
-								- API được cung cấp miễn phí: <a href="https://ophim1.cc/api-document" target="_blank">https://ophim1.cc/api-document</a>  |  <a href="https://phim.nguonc.com/api-document" target="_blank">https://phim.nguonc.com/api-document</a>  |  <a href="https://kkphim.vip/help/help.html" target="_blank">https://kkphim.vip/help/help.html</a> <br />
+								- API được cung cấp miễn phí: <a href="https://ophim1.cc/api-document" target="_blank">https://ophim1.cc/api-document</a> | <a href="https://phim.nguonc.com/api-document" target="_blank">https://phim.nguonc.com/api-document</a> | <a href="https://kkphim.vip/help/help.html" target="_blank">https://kkphim.vip/help/help.html</a> <br />
 								- Mua tool hoặc có vấn đề cần giải đáp.Vui lòng liên hệ: <a href="https://t.me/roxone9" target="_blank">https://t.me/roxone9</a> <br />
 							</div>
 						</div>
@@ -493,9 +493,12 @@ function crawl_ophim_page_handle_nguonc($url)
 		foreach ($sourcePage->items as $key => $item) {
 			// ===================================================================================================================================
 			// Cần chỉnh sửa
-			$url = "https://phim.nguonc.com/api/film/{$item->slug}";
-
-			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|no_id|{$item->modified}|{$item->name}|{$item->original_name}|no_year");
+			
+			$url_page = "https://phim.nguonc.com/api/film/{$item->slug}";
+			$source_url			=  HALIMHelper::cURL($url_page);
+			$source_item      = json_decode($source_url);
+			$id_phim = $source_item->movie->id ?? 'no_id';
+			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$id_phim}|{$item->modified}|{$item->name}|{$item->original_name}");
 		}
 		return join("\n", $listMovies);
 	}
@@ -554,15 +557,15 @@ function crawl_ophim_movies_nguonc()
 {
 	$data_post 					= $_POST['url'];
 	$url 								= explode('|', $data_post)[0];
-	$sourcePage 			=  HALIMHelper::cURL($url);
-	$item_detail      = json_decode($sourcePage);
-	// 	$ophim_id 					= explode('|', $data_post)[1];
-	$ophim_id 					= $item_detail->movie->id;
+	// $sourcePage 			=  HALIMHelper::cURL($url);
+	// $item_detail      = json_decode($sourcePage);
+		$ophim_id 					= explode('|', $data_post)[1];
+	// $ophim_id 					= $item_detail->movie->id;
 	$ophim_update_time 	= explode('|', $data_post)[2];
-	$title 							= explode('|', $data_post)[3];
-	$org_title 					= explode('|', $data_post)[4];
+	// $title 							= explode('|', $data_post)[3];
+	// $org_title 					= explode('|', $data_post)[4];
 	// 	$year 							= explode('|', $data_post)[5];
-	$year 							= $item_detail->movie->category->{3}->list[0]->name;
+	// $year 							= $item_detail->movie->category->{3}->list[0]->name;
 
 	$filterType 				= $_POST['filterType'] ?: [];
 	$filterCategory 		= $_POST['filterCategory'] ?: [];
@@ -575,13 +578,14 @@ function crawl_ophim_movies_nguonc()
 function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry)
 {
 	try {
+		$id_phim = ($ophim_id == null || $ophim_id == 'no_id')? $url: $ophim_id;
 		$args = array(
 			'post_type' => 'post',
 			'posts_per_page' => 1,
 			'meta_query' => array(
 				array(
 					'key' => '_halim_metabox_options',
-					'value' => $url,
+					'value' => $id_phim,
 					'compare' => 'LIKE'
 				)
 			)
@@ -597,7 +601,7 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 				'meta_query' => array(
 					array(
 						'key' => '_halim_metabox_options',
-						'value' => $url,
+						'value' => $id_phim,
 						'compare' => 'LIKE'
 					)
 				)
