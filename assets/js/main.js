@@ -38,10 +38,13 @@ jQuery(function ($) {
   const inputSearch = $("input[name=key_search_nguonc]");
   const buttonSearchMoviesNguonc = $("div#search_movies_nguonc");
   // End Nguonc
+<<<<<<< HEAD
    // Kkphimn
    const buttonGetListMoviesKKphim = $("div#get_list_movies_kkphim");
    const buttonCrawlMoviesKKphim = $("div#crawl_movies_kkphim");
    // End KKphim
+=======
+>>>>>>> main
   const divMsg = $("div#msg");
   const divMsgText = $("p#msg_text");
   const textArealistMovies = $("textarea#result_list_movies");
@@ -96,16 +99,28 @@ jQuery(function ($) {
     });
   });
   // End button search movie nguonc
+<<<<<<< HEAD
   // button get list movie nguonc
+=======
+    // button get list movie nguonc
+>>>>>>> main
   buttonGetListMoviesNguonc.on("click", () => {
     divMsg.show(300);
     textArealistMovies.show(300);
     crawl_page_callback_nguonc(inputPageFrom.val());
   });
+<<<<<<< HEAD
   // end button get list movie nguonc
   // function crawl_page_callback_nguonc
   const crawl_page_callback_nguonc = (currentPage) => {
      var urlPageCrawl = `https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${currentPage}`;
+=======
+    // end button get list movie nguonc
+
+  // function crawl_page_callback_nguonc
+  const crawl_page_callback_nguonc = (currentPage) => {
+     var urlPageCrawl = `https://phim.nguonc.com/api/films/the-loai/hoat-hinh?page=${currentPage}`;
+>>>>>>> main
     if (currentPage < inputPageTo.val()) {
       divMsgText.html("Done!");
       buttonCrawlMovies.show(300);
@@ -134,6 +149,7 @@ jQuery(function ($) {
     });
   };
     //end function crawl_page_callback_nguonc
+<<<<<<< HEAD
   // button get list movie kkphim
   buttonGetListMoviesKKphim.on("click", () => {
     divMsg.show(300);
@@ -172,6 +188,8 @@ jQuery(function ($) {
        });
      };
        //end function crawl_page_callback_kkphim
+=======
+>>>>>>> main
   const crawl_page_callback = (currentPage) => {
     var urlPageCrawl = `https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=${currentPage}`;
 
@@ -206,6 +224,7 @@ jQuery(function ($) {
   var inputFilterType = [];
   var inputFilterCategory = [];
   var inputFilterCountry = [];
+<<<<<<< HEAD
 // button crawl movide  kkphim
 buttonCrawlMoviesKKphim.on("click", () => {
   divMsg.show(300);
@@ -293,6 +312,9 @@ const crawl_movies_kkphim = () => {
 };
 // end function crawl movies kkphinm
 // button crawl movide  nguonc
+=======
+// button crawl movide 
+>>>>>>> main
 buttonCrawlMoviesNguonc.on("click", () => {
   divMsg.show(300);
   divMsgCrawlSuccess.show(300);
@@ -373,7 +395,11 @@ const crawl_movies_nguonc = () => {
       else currentList += linkCurrent;
       textAreaResultError.val(currentList);
 
+<<<<<<< HEAD
       crawl_movies_nguonc();
+=======
+      crawl_movies();
+>>>>>>> main
     },
   });
 };
@@ -535,6 +561,10 @@ const crawl_movies_nguonc = () => {
       },
     });
   })
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
   $("#crawl_ophim_schedule_enable").on("click", (e) => {
     let enable = $("#crawl_ophim_schedule_enable").is(":checked");
     $.ajax({
@@ -550,6 +580,7 @@ const crawl_movies_nguonc = () => {
       },
     });
   })
+<<<<<<< HEAD
     $("#save_crawl_auto").on("click", (e) => {
     // let enable = $("#crawl_ophim_schedule_enable").is(":checked");
     let select_source = $('input[name="crawl_ophim_radio"]:checked').val()
@@ -567,6 +598,8 @@ const crawl_movies_nguonc = () => {
       },
     });
   })
+=======
+>>>>>>> main
   $("#save_crawl_ophim_schedule_secret").on("click", (e) => {
     let secret_key = $("input[name='crawl_ophim_schedule_secret']").val();
     $.ajax({

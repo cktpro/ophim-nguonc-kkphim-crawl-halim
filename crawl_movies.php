@@ -19,19 +19,30 @@ function crawl_tools()
 	$cache = new Cache();
 
 	$categoryFromApi = $cache->readCache(API_DOMAIN . "/the-loai");
+<<<<<<< HEAD
 	if (!$categoryFromApi) { // Kiểm tra nếu cache tồn tại
+=======
+	if(!$categoryFromApi) { // Kiểm tra nếu cache tồn tại
+>>>>>>> main
 		$categoryFromApi = file_get_contents(API_DOMAIN . "/the-loai");
 		$cache->timeCache = 86400;
 		$cache->saveCache(API_DOMAIN . "/the-loai", $categoryFromApi); // Lưu cache
 	}
 	$categoryFromApi = json_decode($categoryFromApi);
+<<<<<<< HEAD
 
 	$countryFromApi = $cache->readCache(API_DOMAIN . "/quoc-gia");
 	if (!$countryFromApi) { // Kiểm tra nếu cache tồn tại
+=======
+	
+	$countryFromApi = $cache->readCache(API_DOMAIN . "/quoc-gia");
+	if(!$countryFromApi) { // Kiểm tra nếu cache tồn tại
+>>>>>>> main
 		$countryFromApi = file_get_contents(API_DOMAIN . "/quoc-gia");
 		$cache->timeCache = 86400;
 		$cache->saveCache(API_DOMAIN . "/quoc-gia", $countryFromApi); // Lưu cache
 	}
+<<<<<<< HEAD
 	$countryFromApi = json_decode($countryFromApi);
 ?>
 
@@ -124,20 +135,84 @@ function crawl_tools()
 								</div>
 
 
+=======
+	$countryFromApi = json_decode($countryFromApi);	
+?>
+
+<?php
+  $default_tab = null;
+  $tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
+?>
+
+<div class="wrap">
+	<nav class="nav-tab-wrapper">
+	<a href="?page=crawl-ophim-tools&tab=nguonc" class="nav-tab <?php if($tab==='nguonc'):?>nav-tab-active<?php endif; ?>">Crawl Nguonc</a>
+    <a href="?page=crawl-ophim-tools" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Thủ công</a>
+    <a href="?page=crawl-ophim-tools&tab=schedule" class="nav-tab <?php if($tab==='schedule'):?>nav-tab-active<?php endif; ?>">Tự động</a>
+    <a href="?page=crawl-ophim-tools&tab=about" class="nav-tab <?php if($tab==='about'):?>nav-tab-active<?php endif; ?>">Giới thiệu</a>
+  </nav>
+	<div class="tab-content">
+		<?php
+			switch($tab) :
+				case 'schedule':
+				$crawl_ophim_settings = json_decode(get_option(CRAWL_OPHIM_OPTION_SETTINGS, []));
+				$schedule_log = getLastLog();
+		?>
+
+				<div class="crawl_page">
+					<div class="postbox">
+						<div class="inside">
+							<b>Hưỡng dẫn cấu hình crontab</b>
+							<div>
+								<p>
+									Thời gian thực hiện (<a href="https://crontab.guru/" target="_blank">Xem thêm</a>)
+								</p>
+								<p>
+									Cấu hình crontab: <code><i style="color:blueviolet">*/10 * * * *</i> cd <i style="color:blueviolet">/path/to/</i>wp-content/plugins/crawl_ophim_halimthemes/ && php -q schedule.php <i style="color:blueviolet">{secret_key}</i></code>
+								</p>
+								<p>
+									Ví dụ:
+									<br />
+									Mỗi 5 phút: <code>*/5 * * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
+									<br />
+									Mỗi 10 phút: <code>*/10 * * * * cd <?php echo CRAWL_OPHIM_PATH; ?> && php -q schedule.php <i style="color:blueviolet"><?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?></i></code>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="crawl_page">
+					<div class="postbox">
+						<div class="inside">
+							<b>Cấu hình tự động</b>
+							<div>
+								<p>
+									Secret Key: <input type="text" name="crawl_ophim_schedule_secret" value="<?php echo get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, ''); ?>">
+									<button id="save_crawl_ophim_schedule_secret" class="button">Lưu mật khẩu</button>
+								</p>
+>>>>>>> main
 							</div>
 							<div>
 								<p>
 									Kích hoạt:
 									<input type="checkbox" class="wppd-ui-toggle" id="crawl_ophim_schedule_enable" name="crawl_ophim_schedule_enable"
+<<<<<<< HEAD
 										value="ophim"
 										<?php echo (json_decode(file_get_contents(CRAWL_OPHIM_PATH_SCHEDULE_JSON))->enable === true) ? 'checked' : ''; ?>>
 
+=======
+										value=""
+										<?php echo (json_decode(file_get_contents(CRAWL_OPHIM_PATH_SCHEDULE_JSON))->enable === true) ? 'checked' : ''; ?>
+									>
+>>>>>>> main
 								</p>
 							</div>
 							<div>
 								<p>Trạng thái: <?php echo (int) get_option(CRAWL_OPHIM_OPTION_RUNNING, 0) === 1 ? "<code style='color: blue'>Đang chạy...</code>" : "<code style='color: chocolate'>Dừng</code>"; ?></p>
 							</div>
 							<div>
+<<<<<<< HEAD
 								<p>Bỏ qua định dạng: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterType); ?></code></p>
 								<p>Bỏ qua thể loại: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterCategory); ?></code></p>
 								<p>Bỏ qua quốc gia: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterCountry); ?></code></p>
@@ -394,6 +469,192 @@ function crawl_tools()
 			?>
 		</div>
 	</div>
+=======
+								<p>Bỏ qua định dạng: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterType);?></code></p>
+								<p>Bỏ qua thể loại: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterCategory);?></code></p>
+								<p>Bỏ qua quốc gia: <code style="color: red"><?php echo join(', ', $crawl_ophim_settings->filterCountry);?></code></p>
+							</div>
+							<div>
+								<p>Page đầu: <code style="color: blue"><?php echo $crawl_ophim_settings->pageFrom;?></code></p>
+								<p>Page cuối: <code style="color: blue"><?php echo $crawl_ophim_settings->pageTo;?></code></p>
+							</div>
+
+								<div class="notice notice-success">
+									<p>File logs: <code style="color:brown"><?php echo $schedule_log['log_filename'];?></code></p>
+									<textarea rows="10" id="schedule_log" class="" readonly><?php echo $schedule_log['log_data'];?></textarea>
+								</div>
+
+						</div>
+					</div>
+				</div>
+		<?php
+				break;
+				case 'nguonc':
+		?>
+		<!-- Auto crawl phim nguồn -->
+		<div class="crawl_main">
+				<div class="crawl_filter notice notice-info">
+				<div class="crawl_page">
+					Nhập phim cần tìm: <input type="text" name="key_search_nguonc" value="">
+					<div id="search_movies_nguonc" class="primary">Search</div>
+				</div>
+					<div class="filter_title"><strong>Bỏ qua định dạng</strong></div>
+					<div class="filter_item">
+						<label><input type="checkbox" class="" name="filter_type[]" value="single"> Phim lẻ</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="series"> Phim bộ</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="hoathinh"> Hoạt hình</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="tvshows"> Tv shows</label>
+					</div>
+
+					<div class="filter_title"><strong>Bỏ qua thể loại</strong></div>
+					<div class="filter_item">
+						<?php
+							foreach($categoryFromApi as $category) {
+						?>
+								<label><input type="checkbox" class="" name="filter_category[]" value="<?php echo $category->name;?>"> <?php echo $category->name;?></label>
+						<?php
+							}
+						?>
+					</div>
+
+					<div class="filter_title"><strong>Bỏ qua quốc gia</strong></div>
+					<div class="filter_item">
+						<?php
+							foreach($countryFromApi as $country) {
+						?>
+								<label><input type="checkbox" class="" name="filter_country[]" value="<?php echo $country->name;?>"> <?php echo $country->name;?></label>
+						<?php
+							}
+						?>
+					</div>
+					<p>
+						<div id="save_crawl_ophim_schedule" class="button">Lưu cấu hình cho crawl tự động</div>
+					</p>
+				</div>
+
+				<div class="crawl_page">
+					Page Crawl: From <input type="number" name="page_from" value="">
+					To <input type="number" name="page_to" value="">
+					<div id="get_list_movies_nguonc" class="primary">Get List Movies Nguonc</div>
+				</div>
+
+				<div class="crawl_page">
+					Wait Timeout Random: From  <input type="number" name="timeout_from" value="">(ms) - 
+					To <input type="number" name="timeout_to" value=""> (ms)
+				</div>
+
+				<div class="crawl_page">
+					<div style="display: none" id="msg" class="notice notice-success">
+						<p id="msg_text"></p>
+					</div>
+					<textarea rows="10" id="result_list_movies" class="list_movies"></textarea>
+					<div id="roll_movies" class="roll">Trộn Link</div>
+					<div id="crawl_movies_nguonc" class="primary">Crawl Movies Nguonc</div>
+
+					<div style="display: none;" id="result_success" class="notice notice-success">
+						<p>Crawl Thành Công</p>
+						<textarea rows="10" id="list_crawl_success"></textarea>
+					</div>
+
+					<div style="display: none;" id="result_error" class="notice notice-error">
+						<p>Crawl Lỗi</p>
+						<textarea rows="10" id="list_crawl_error"></textarea>
+					</div>
+				</div>
+		</div>
+		<?php
+					break;
+				case 'about':
+		?>
+				<div class="crawl_page">
+					<div class="postbox">
+						<div class="inside">
+							Ophim1.CC là website dữ liệu phim miễn phí vĩnh viễn. Cập nhật nhanh, chất lượng cao, ổn định và lâu dài. Tốc độ phát cực nhanh với đường truyền băng thông cao, đảm bảo đáp ứng được lượng xem phim trực tuyến lớn. Đồng thời giúp nhà phát triển website phim giảm thiểu chi phí của các dịch vụ lưu trữ và stream. <br />
+							- Hàng ngày chạy tools tầm 10 đến 20 pages đầu (tùy số lượng phim được cập nhật trong ngày) để update tập mới hoặc thêm phim mới!<br />
+							- Trộn link vài lần để thay đổi thứ tự crawl & update. Giúp tránh việc quá giống nhau về content của các website!<br />
+							- API được cung cấp miễn phí: <a href="https://ophim1.cc/api-document" target="_blank">https://ophim1.cc/api-document</a> <br />
+							- Tham gia trao đổi tại: <a href="https://t.me/+QMfjBOtNpkZmNTc1" target="_blank">https://t.me/+QMfjBOtNpkZmNTc1</a> <br />
+						</div>
+					</div>
+				</div>
+		<?php
+					break;
+				default:
+		?>
+			<div class="crawl_main">
+				<div class="crawl_filter notice notice-info">
+					<div class="filter_title"><strong>Bỏ qua định dạng</strong></div>
+					<div class="filter_item">
+						<label><input type="checkbox" class="" name="filter_type[]" value="single"> Phim lẻ</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="series"> Phim bộ</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="hoathinh"> Hoạt hình</label>
+						<label><input type="checkbox" class="" name="filter_type[]" value="tvshows"> Tv shows</label>
+					</div>
+
+					<div class="filter_title"><strong>Bỏ qua thể loại</strong></div>
+					<div class="filter_item">
+						<?php
+							foreach($categoryFromApi as $category) {
+						?>
+								<label><input type="checkbox" class="" name="filter_category[]" value="<?php echo $category->name;?>"> <?php echo $category->name;?></label>
+						<?php
+							}
+						?>
+					</div>
+
+					<div class="filter_title"><strong>Bỏ qua quốc gia</strong></div>
+					<div class="filter_item">
+						<?php
+							foreach($countryFromApi as $country) {
+						?>
+								<label><input type="checkbox" class="" name="filter_country[]" value="<?php echo $country->name;?>"> <?php echo $country->name;?></label>
+						<?php
+							}
+						?>
+					</div>
+					<p>
+						<div id="save_crawl_ophim_schedule" class="button">Lưu cấu hình cho crawl tự động</div>
+					</p>
+				</div>
+
+				<div class="crawl_page">
+					Page Crawl: From <input type="number" name="page_from" value="">
+					To <input type="number" name="page_to" value="">
+					<div id="get_list_movies" class="primary">Get List Movies</div>
+				</div>
+
+				<div class="crawl_page">
+					Wait Timeout Random: From  <input type="number" name="timeout_from" value="">(ms) - 
+					To <input type="number" name="timeout_to" value=""> (ms)
+				</div>
+
+				<div class="crawl_page">
+					<div style="display: none" id="msg" class="notice notice-success">
+						<p id="msg_text"></p>
+					</div>
+					<textarea rows="10" id="result_list_movies" class="list_movies"></textarea>
+					<div id="roll_movies" class="roll">Trộn Link</div>
+					<div id="crawl_movies" class="primary">Crawl Movies</div>
+
+					<div style="display: none;" id="result_success" class="notice notice-success">
+						<p>Crawl Thành Công</p>
+						<textarea rows="10" id="list_crawl_success"></textarea>
+					</div>
+
+					<div style="display: none;" id="result_error" class="notice notice-error">
+						<p>Crawl Lỗi</p>
+						<textarea rows="10" id="list_crawl_error"></textarea>
+					</div>
+				</div>
+			</div>
+
+		<?php
+					break;
+			endswitch;
+		?>
+	</div>
+</div>
+>>>>>>> main
 <?php
 }
 
@@ -403,6 +664,7 @@ function save_crawl_ophim_schedule_secret()
 	update_option(CRAWL_OPHIM_OPTION_SECRET_KEY, $_POST['secret_key']);
 	die();
 }
+<<<<<<< HEAD
 add_action('wp_ajax_crawl_ophim_schedule_select', 'crawl_ophim_schedule_select');
 function crawl_ophim_schedule_select()
 {
@@ -414,11 +676,18 @@ function crawl_ophim_schedule_select()
 	file_put_contents(CRAWL_OPHIM_PATH_SOURCE_JSON, json_encode($schedule));
 	die();
 }
+=======
+
+>>>>>>> main
 add_action('wp_ajax_crawl_ophim_schedule_enable', 'crawl_ophim_schedule_enable');
 function crawl_ophim_schedule_enable()
 {
 	$schedule = array(
+<<<<<<< HEAD
 		'enable' => $_POST['enable'] === 'true' ? true : false,
+=======
+		'enable' => $_POST['enable'] === 'true' ? true : false
+>>>>>>> main
 	);
 	file_put_contents(CRAWL_OPHIM_PATH_SCHEDULE_JSON, json_encode($schedule));
 	die();
@@ -452,6 +721,7 @@ function search_phim_nguonc()
 }
 function search_phim_nguonc_handle($keyword)
 {
+<<<<<<< HEAD
 	$key_search = slugify($keyword, '-');
 	$search_url = "https://phim.nguonc.com/api/films/search?keyword=${key_search}";
 	$sourcePage 			=  HALIMHelper::cURL($search_url);
@@ -463,17 +733,38 @@ function search_phim_nguonc_handle($keyword)
 			// ===================================================================================================================================
 			// Cần chỉnh sửa
 			$url = "https://phim.nguonc.com/api/film/{$item->slug}";
+=======
+	$key_search = slugify($keyword,'-');
+	$search_url = "https://phim.nguonc.com/api/films/search?keyword=${key_search}";
+	$sourcePage 			=  HALIMHelper::cURL($search_url );
+	$sourcePage       = json_decode($sourcePage);
+	$listMovies 			= [];
+
+	if(count($sourcePage->items) > 0) {
+		foreach ($sourcePage->items as $key => $item) {
+			// ===================================================================================================================================
+			// Cần chỉnh sửa
+			$url= "https://phim.nguonc.com/api/film/{$item->slug}";
+>>>>>>> main
 			$sourcePage 			=  HALIMHelper::cURL($url);
 			$item_detail      = json_decode($sourcePage);
 			// $year=date('Y', strtotime($item ->created ));
 			// array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item->_id}|{$item->modified}|{$item->name}|{$item->original_name}|{$item ->created}");
+<<<<<<< HEAD
 			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item_detail->movie->id}|{$item->modified}|{$item->name}|{$item->original_name}|{$item_detail->movie->category->{3}->list[0]->name}");
+=======
+			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item_detail->movie->id}|{$item->modified}|{$item->name}|{$item->original_name}|{$item_detail ->movie->category->{3}->list[0]->name}");
+>>>>>>> main
 		}
 		return join("\n", $listMovies);
 	}
 	return false;
 }
+<<<<<<< HEAD
 // action crawl page nguonc
+=======
+// action crawl nguonc
+>>>>>>> main
 add_action('wp_ajax_crawl_ophim_page_nguonc', 'crawl_ophim_page_nguonc');
 function crawl_ophim_page_nguonc()
 {
@@ -486,18 +777,28 @@ function crawl_ophim_page_handle_nguonc($url)
 	$sourcePage       = json_decode($sourcePage);
 	$listMovies 			= [];
 
+<<<<<<< HEAD
 	if (count($sourcePage->items) > 0) {
 		foreach ($sourcePage->items as $key => $item) {
 			// ===================================================================================================================================
 			// Cần chỉnh sửa
 			$url = "https://phim.nguonc.com/api/film/{$item->slug}";
 
+=======
+	if(count($sourcePage->items) > 0) {
+		foreach ($sourcePage->items as $key => $item) {
+			// ===================================================================================================================================
+			// Cần chỉnh sửa
+			$url= "https://phim.nguonc.com/api/film/{$item->slug}";
+			
+>>>>>>> main
 			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|no_id|{$item->modified}|{$item->name}|{$item->original_name}|no_year");
 		}
 		return join("\n", $listMovies);
 	}
 	return $listMovies;
 }
+<<<<<<< HEAD
 // end action page crawl nguonc
 // action crawl page kkphim
 add_action('wp_ajax_crawl_ophim_page_kkphim', 'crawl_ophim_page_kkphim');
@@ -524,6 +825,9 @@ function crawl_ophim_page_handle_kkphim($url)
 	return $listMovies;
 }
 // end action page crawl kkphim
+=======
+// end action crawl nguonc
+>>>>>>> main
 add_action('wp_ajax_crawl_ophim_page', 'crawl_ophim_page');
 function crawl_ophim_page()
 {
@@ -537,7 +841,11 @@ function crawl_ophim_page_handle($url)
 	$sourcePage       = json_decode($sourcePage);
 	$listMovies 			= [];
 
+<<<<<<< HEAD
 	if (count($sourcePage->items) > 0) {
+=======
+	if(count($sourcePage->items) > 0) {
+>>>>>>> main
 		foreach ($sourcePage->items as $key => $item) {
 			array_push($listMovies, "https://ophim.tv/phim/{$item->slug}|{$item->_id}|{$item->modified->time}|{$item->name}|{$item->origin_name}|{$item->year}");
 		}
@@ -553,14 +861,24 @@ function crawl_ophim_movies_nguonc()
 	$url 								= explode('|', $data_post)[0];
 	$sourcePage 			=  HALIMHelper::cURL($url);
 	$item_detail      = json_decode($sourcePage);
+<<<<<<< HEAD
 	// 	$ophim_id 					= explode('|', $data_post)[1];
+=======
+// 	$ophim_id 					= explode('|', $data_post)[1];
+>>>>>>> main
 	$ophim_id 					= $item_detail->movie->id;
 	$ophim_update_time 	= explode('|', $data_post)[2];
 	$title 							= explode('|', $data_post)[3];
 	$org_title 					= explode('|', $data_post)[4];
+<<<<<<< HEAD
 	// 	$year 							= explode('|', $data_post)[5];
 	$year 							= $item_detail->movie->category->{3}->list[0]->name;
 
+=======
+// 	$year 							= explode('|', $data_post)[5];
+	$year 							= $item_detail ->movie->category->{3}->list[0]->name;
+	
+>>>>>>> main
 	$filterType 				= $_POST['filterType'] ?: [];
 	$filterCategory 		= $_POST['filterCategory'] ?: [];
 	$filterCountry 			= $_POST['filterCountry'] ?: [];
@@ -603,8 +921,13 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 			if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
 					global $post;
 					$_halim_metabox_options = get_post_meta($post->ID, '_halim_metabox_options', true);
+<<<<<<< HEAD
 					if ($_halim_metabox_options["fetch_ophim_update_time"] == $ophim_update_time) { // Không có gì cần cập nhật
 
+=======
+					if($_halim_metabox_options["fetch_ophim_update_time"] == $ophim_update_time) { // Không có gì cần cập nhật
+						
+>>>>>>> main
 						$result = array(
 							'status'   			=> true,
 							'post_id' 			=> null,
@@ -636,7 +959,11 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 					$_halim_metabox_options["halim_episode"] 						= $data['episode'];
 					$_halim_metabox_options["halim_total_episode"] 			= $data['total_episode'];
 					$_halim_metabox_options["halim_quality"] 						= $data['lang'] . ' - ' . $data['quality'];
+<<<<<<< HEAD
 					// $_halim_metabox_options["halim_showtime_movies"] 		= $data['showtime'];
+=======
+					$_halim_metabox_options["halim_showtime_movies"] 		= $data['showtime'];
+>>>>>>> main
 					update_post_meta($post->ID, '_halim_metabox_options', $_halim_metabox_options);
 
 					// Re-Update Episodes
@@ -654,12 +981,20 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 				endwhile;
 			endif;
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> main
 		// $api_url 		= str_replace('ophim.tv', 'ophim1.com', $url);
 		$sourcePage =  HALIMHelper::cURL($url);
 		$sourcePage = json_decode($sourcePage, true);
 		$data 			= create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
+<<<<<<< HEAD
 		if ($data['crawl_filter']) {
+=======
+		if($data['crawl_filter']) {
+>>>>>>> main
 			$result = array(
 				'status'				=> false,
 				'post_id' 			=> null,
@@ -683,7 +1018,11 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 			'schedule_code' => SCHEDULE_CRAWLER_TYPE_INSERT
 		);
 		return json_encode($result);
+<<<<<<< HEAD
 	} catch (Exception $e) {
+=======
+  } catch (Exception $e) {
+>>>>>>> main
 		$result = array(
 			'status'				=> false,
 			'post_id' 			=> null,
@@ -694,6 +1033,7 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 			'schedule_code' => SCHEDULE_CRAWLER_TYPE_ERROR
 		);
 		return json_encode($result);
+<<<<<<< HEAD
 	}
 }
 // end action crawl nguonc movies
@@ -846,6 +1186,11 @@ function crawl_kkphim_movies_handle($url, $kkphim_id, $kkphim_update_time, $filt
 }
 // end action crawl kkphim movies
 // --------------------------------------------------------------------------------------
+=======
+  }
+}
+// end action crawl nguonc movies
+>>>>>>> main
 add_action('wp_ajax_crawl_ophim_movies', 'crawl_ophim_movies');
 function crawl_ophim_movies()
 {
@@ -856,7 +1201,11 @@ function crawl_ophim_movies()
 	$title 							= explode('|', $data_post)[3];
 	$org_title 					= explode('|', $data_post)[4];
 	$year 							= explode('|', $data_post)[5];
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> main
 	$filterType 				= $_POST['filterType'] ?: [];
 	$filterCategory 		= $_POST['filterCategory'] ?: [];
 	$filterCountry 			= $_POST['filterCountry'] ?: [];
@@ -900,7 +1249,11 @@ function crawl_ophim_movies_handle($url, $ophim_id, $ophim_update_time, $filterT
 			if ($wp_query->have_posts()) : while ($wp_query->have_posts()) : $wp_query->the_post();
 					global $post;
 					$_halim_metabox_options = get_post_meta($post->ID, '_halim_metabox_options', true);
+<<<<<<< HEAD
 					if ($_halim_metabox_options["fetch_ophim_update_time"] == $ophim_update_time) { // Không có gì cần cập nhật
+=======
+					if($_halim_metabox_options["fetch_ophim_update_time"] == $ophim_update_time) { // Không có gì cần cập nhật
+>>>>>>> main
 						$result = array(
 							'status'   			=> true,
 							'post_id' 			=> null,
@@ -954,7 +1307,7 @@ function crawl_ophim_movies_handle($url, $ophim_id, $ophim_update_time, $filterT
 		$sourcePage =  HALIMHelper::cURL($api_url);
 		$sourcePage = json_decode($sourcePage, true);
 		$data 			= create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
-		if ($data['crawl_filter']) {
+		if($data['crawl_filter']) {
 			$result = array(
 				'status'				=> false,
 				'post_id' 			=> null,
@@ -978,7 +1331,7 @@ function crawl_ophim_movies_handle($url, $ophim_id, $ophim_update_time, $filterT
 			'schedule_code' => SCHEDULE_CRAWLER_TYPE_INSERT
 		);
 		return json_encode($result);
-	} catch (Exception $e) {
+  } catch (Exception $e) {
 		$result = array(
 			'status'				=> false,
 			'post_id' 			=> null,
@@ -1072,16 +1425,25 @@ function create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $f
 	return $data;
 }
 // end function create data nguonc ========================================================================================================
+<<<<<<< HEAD
 // Create data kkphim
 function create_data_kkphim($sourcePage, $url, $kkphim_id, $kkphim_update_time, $filterType = [], $filterCategory = [], $filterCountry = [])
 {
 	if (in_array($sourcePage["movie"]["type"], $filterType)) {
+=======
+function create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType = [], $filterCategory = [], $filterCountry = []) {
+	if(in_array($sourcePage["movie"]["type"], $filterType))  {
+>>>>>>> main
 		return array(
 			'crawl_filter' => true,
 		);
 	}
 
+<<<<<<< HEAD
 	if ($sourcePage["movie"]["type"] == "single") {
+=======
+	if($sourcePage["movie"]["type"] == "single") {
+>>>>>>> main
 		$type = "single_movies";
 	} else {
 		$type	= "tv_series";
@@ -1089,13 +1451,18 @@ function create_data_kkphim($sourcePage, $url, $kkphim_id, $kkphim_update_time, 
 
 	$arrCat = [];
 	foreach ($sourcePage["movie"]["category"] as $key => $value) {
+<<<<<<< HEAD
 		if (in_array($value["name"], $filterCategory)) {
+=======
+		if(in_array($value["name"], $filterCategory))  {
+>>>>>>> main
 			return array(
 				'crawl_filter' => true,
 			);
 		}
 		array_push($arrCat, $value["name"]);
 	}
+<<<<<<< HEAD
 	if ($sourcePage["movie"]["chieurap"] == true) {
 		array_push($arrCat, "Chiếu Rạp");
 	}
@@ -1104,12 +1471,26 @@ function create_data_kkphim($sourcePage, $url, $kkphim_id, $kkphim_update_time, 
 		$type = (count(reset($sourcePage["episodes"])['server_data'] ?? []) > 1 ? 'series' : 'single');
 	}
 	if ($sourcePage["movie"]["type"] == "tvshows") {
+=======
+	if($sourcePage["movie"]["chieurap"] == true) {
+		array_push($arrCat, "Chiếu Rạp");
+	}
+	if($sourcePage["movie"]["type"] == "hoathinh") {
+		array_push($arrCat, "Hoạt Hình");
+		$type = (count(reset($sourcePage["episodes"])['server_data'] ?? []) > 1 ? 'series' : 'single');
+	}
+	if($sourcePage["movie"]["type"] == "tvshows") {
+>>>>>>> main
 		array_push($arrCat, "TV Shows");
 	}
 
 	$arrCountry 	= [];
 	foreach ($sourcePage["movie"]["country"] as $key => $value) {
+<<<<<<< HEAD
 		if (in_array($value["name"], $filterCountry)) {
+=======
+		if(in_array($value["name"], $filterCountry))  {
+>>>>>>> main
 			return array(
 				'crawl_filter' => true,
 			);
@@ -1119,6 +1500,7 @@ function create_data_kkphim($sourcePage, $url, $kkphim_id, $kkphim_update_time, 
 
 	$arrTags 			= [];
 	array_push($arrTags, $sourcePage["movie"]["name"]);
+<<<<<<< HEAD
 	if ($sourcePage["movie"]["name"] != $sourcePage["movie"]["origin_name"]) array_push($arrTags, $sourcePage["movie"]["origin_name"]);
 
 	$data = array(
@@ -1198,6 +1580,9 @@ function create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterTy
 	$arrTags 			= [];
 	array_push($arrTags, $sourcePage["movie"]["name"]);
 	if ($sourcePage["movie"]["name"] != $sourcePage["movie"]["origin_name"]) array_push($arrTags, $sourcePage["movie"]["origin_name"]);
+=======
+	if($sourcePage["movie"]["name"] != $sourcePage["movie"]["origin_name"]) array_push($arrTags, $sourcePage["movie"]["origin_name"]);
+>>>>>>> main
 
 	$data = array(
 		'crawl_filter'						=> false,
@@ -1257,7 +1642,11 @@ function add_posts($data)
 	);
 	$post_id 						= wp_insert_post($post_data);
 
+<<<<<<< HEAD
 	if ($data['poster'] && $data['poster'] != "") {
+=======
+	if($data['poster'] && $data['poster'] != "") {
+>>>>>>> main
 		$res 								= save_images($data['poster'], $post_id, $data['title']);
 		$poster_image_url 	= str_replace(get_site_url(), '', $res['url']);
 	}
@@ -1367,6 +1756,7 @@ function get_list_episode_nguonc($sourcePage, $post_id)
 
 				$ep_data['halimmovies_ep_name'] 	= $episode["name"];
 				$ep_data['halimmovies_ep_slug'] 	= $slug_ep;
+<<<<<<< HEAD
 				$ep_data['halimmovies_ep_type'] 	= 'embed';
 				$ep_data['halimmovies_ep_link'] 	= $episode["embed"];
 				$ep_data['halimmovies_ep_subs'] 	= array();
@@ -1407,16 +1797,28 @@ function get_list_episode_kkphim($sourcePage, $post_id)
 				$ep_data['halimmovies_ep_slug'] 	= $slug_ep;
 				$ep_data['halimmovies_ep_type'] 	= 'link';
 				$ep_data['halimmovies_ep_link'] 	= $episode["link_m3u8"];
+=======
+				$ep_data['halimmovies_ep_type'] 	= 'link';
+				$ep_data['halimmovies_ep_link'] 	= $episode["m3u8"];
+>>>>>>> main
 				$ep_data['halimmovies_ep_subs'] 	= array();
 				$ep_data['halimmovies_ep_listsv'] = array();
 				# Sử dụng link embed làm server dự phòng.
 				$subServerData = array(
+<<<<<<< HEAD
 					"halimmovies_ep_listsv_link" => $episode["link_embed"],
+=======
+					"halimmovies_ep_listsv_link" => $episode["embed"],
+>>>>>>> main
 					"halimmovies_ep_listsv_type" => "embed",
 					"halimmovies_ep_listsv_name" => "#Dự Phòng"
 				);
 				array_push($ep_data['halimmovies_ep_listsv'], $subServerData);
+<<<<<<< HEAD
 
+=======
+				
+>>>>>>> main
 				$server_info["halimmovies_server_data"][$slug_array] = $ep_data;
 			}
 			array_push($server_add, $server_info);
@@ -1454,7 +1856,11 @@ function get_list_episode($sourcePage, $post_id)
 					"halimmovies_ep_listsv_name" => "#Dự Phòng"
 				);
 				array_push($ep_data['halimmovies_ep_listsv'], $subServerData);
+<<<<<<< HEAD
 
+=======
+				
+>>>>>>> main
 				$server_info["halimmovies_server_data"][$slug_array] = $ep_data;
 			}
 			array_push($server_add, $server_info);
@@ -1479,8 +1885,12 @@ function slugify($str, $divider = '-')
 	return $str;
 }
 
+<<<<<<< HEAD
 function getStatus($status)
 {
+=======
+function getStatus($status) {
+>>>>>>> main
 	$hl_status = "completed";
 	switch (strtolower($status)) {
 		case 'ongoing':
@@ -1496,6 +1906,7 @@ function getStatus($status)
 	return $hl_status;
 }
 // functuon getStatus Nguonc =====================================================================
+<<<<<<< HEAD
 function getStatusNguonc($status)
 {
 	$newStatus = slugify($status, '_');
@@ -1505,6 +1916,17 @@ function getStatusNguonc($status)
 	} elseif (strpos($newStatus, 'hoan') !== false || strpos($newStatus, 'full') !== false) {
 		$hl_status = "completed";
 	} else {
+=======
+function getStatusNguonc($status) {
+	$newStatus= slugify($status,'_');
+	$hl_status = "completed";
+	if (strpos($newStatus, 'tap')!==false || strpos($newStatus, 'dang')!==false) {
+		$hl_status = "ongoing";
+	} elseif (strpos($newStatus, 'hoan')!==false || strpos($newStatus, 'full')!==false) {
+		$hl_status = "completed";
+	}
+	else{
+>>>>>>> main
 		$hl_status = "is_trailer";
 	}
 	return $hl_status;
