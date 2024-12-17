@@ -207,6 +207,14 @@ function crawl_tools()
 						<div class="crawl_page">
 							Url Crawl: <input type="text" name="url_nguonc_crawl" size="50" value="">
 							<div id="get_list_movies_nguonc" class="primary">Get List Movies Nguonc</div>
+							<div>
+								<p>Nhập url theo định dạng dưới đây.Chi tiết tại <a href="https://phim.nguonc.com/api-document" target="_blank">https://phim.nguonc.com/api-document</a></p></br>
+								<code>https://phim.nguonc.com/api/films/phim-moi-cap-nhat</code></br>
+								<code>https://phim.nguonc.com/api/films/danh-sach/phim-dang-chieu</code></br>
+								<code>https://phim.nguonc.com/api/films/the-loai/hoat-hinh</code></br>
+								<code>https://phim.nguonc.com/api/films/quoc-gia/trung-quoc</code></br>
+								<code>https://phim.nguonc.com/api/films/nam-phat-hanh/2024</code>
+							</div>
 						</div>
 
 						<div class="crawl_page">
@@ -436,6 +444,7 @@ function crawl_ophim_save_settings()
 		'filterType' => $_POST['filterType'] ?? array(),
 		'filterCategory' => $_POST['filterCategory'] ?? array(),
 		'filterCountry' => $_POST['filterCountry'] ?? array(),
+		'url_nguonc_post' => $_POST['url_nguonc_post'] ?? null,
 	);
 	if (!get_option(CRAWL_OPHIM_OPTION_SETTINGS)) {
 		add_option(CRAWL_OPHIM_OPTION_SETTINGS, json_encode($data));
@@ -468,6 +477,7 @@ function search_phim_nguonc_handle($keyword)
 			$url = "https://phim.nguonc.com/api/film/{$item->slug}";
 			$sourcePage 			=  HALIMHelper::cURL($url);
 			$item_detail      = json_decode($sourcePage);
+
 			// $year=date('Y', strtotime($item ->created ));
 			// array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item->_id}|{$item->modified}|{$item->name}|{$item->original_name}|{$item ->created}");
 			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item_detail->movie->id}|{$item->modified}|{$item->name}|{$item->original_name}|{$item_detail->movie->category->{3}->list[0]->name}");
@@ -493,12 +503,10 @@ function crawl_ophim_page_handle_nguonc($url)
 		foreach ($sourcePage->items as $key => $item) {
 			// ===================================================================================================================================
 			// Cần chỉnh sửa
-			
-			$url_page = "https://phim.nguonc.com/api/film/{$item->slug}";
-			$source_url			=  HALIMHelper::cURL($url_page);
-			$source_item      = json_decode($source_url);
-			$id_phim = $source_item->movie->id ?? 'no_id';
-			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$id_phim}|{$item->modified}|{$item->name}|{$item->original_name}");
+
+			// $url_page = "https://phim.nguonc.com/api/film/{$item->slug}";
+
+			array_push($listMovies, "https://phim.nguonc.com/api/film/{$item->slug}|{$item->modified}|{$item->name}|{$item->original_name}");
 		}
 		return join("\n", $listMovies);
 	}
@@ -559,9 +567,9 @@ function crawl_ophim_movies_nguonc()
 	$url 								= explode('|', $data_post)[0];
 	// $sourcePage 			=  HALIMHelper::cURL($url);
 	// $item_detail      = json_decode($sourcePage);
-		$ophim_id 					= explode('|', $data_post)[1];
+	// $ophim_id 					= explode('|', $data_post)[1];
 	// $ophim_id 					= $item_detail->movie->id;
-	$ophim_update_time 	= explode('|', $data_post)[2];
+	$ophim_update_time 	= explode('|', $data_post)[1];
 	// $title 							= explode('|', $data_post)[3];
 	// $org_title 					= explode('|', $data_post)[4];
 	// 	$year 							= explode('|', $data_post)[5];
@@ -571,14 +579,17 @@ function crawl_ophim_movies_nguonc()
 	$filterCategory 		= $_POST['filterCategory'] ?: [];
 	$filterCountry 			= $_POST['filterCountry'] ?: [];
 
-	$result = crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
+	$result = crawl_ophim_movies_handle_nguonc($url, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
 	echo $result;
 	die();
 }
-function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry)
+function crawl_ophim_movies_handle_nguonc($url, $ophim_update_time, $filterType, $filterCategory, $filterCountry)
 {
 	try {
-		$id_phim = ($ophim_id == null || $ophim_id == 'no_id')? $url: $ophim_id;
+
+		$source_url			=  HALIMHelper::cURL($url);
+		$source_item      = json_decode($source_url);
+		$id_phim = (isset($source_item->movie) && isset($source_item->movie->id)) ? $source_item->movie->id : $url;
 		$args = array(
 			'post_type' => 'post',
 			'posts_per_page' => 1,
@@ -626,7 +637,7 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 					// $api_url 			= str_replace('ophim.tv', 'ophim1.com', $url);
 					$sourcePage 	=  HALIMHelper::cURL($url);
 					$sourcePage 	= json_decode($sourcePage, true);
-					$data 				= create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time);
+					$data 				= create_data_nguonc($sourcePage, $url, $ophim_update_time);
 
 					// $status = getStatusNguonc($data['status']);
 
@@ -643,7 +654,7 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 					$_halim_metabox_options["halim_episode"] 						= $data['episode'];
 					$_halim_metabox_options["halim_total_episode"] 			= $data['total_episode'];
 					$_halim_metabox_options["halim_quality"] 						= $data['lang'] . ' - ' . $data['quality'];
-					// $_halim_metabox_options["halim_showtime_movies"] 		= $data['showtime'];
+					$_halim_metabox_options["halim_showtime_movies"] 		= $data['showtime'];
 					update_post_meta($post->ID, '_halim_metabox_options', $_halim_metabox_options);
 
 					// Re-Update Episodes
@@ -665,7 +676,7 @@ function crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $
 		// $api_url 		= str_replace('ophim.tv', 'ophim1.com', $url);
 		$sourcePage =  HALIMHelper::cURL($url);
 		$sourcePage = json_decode($sourcePage, true);
-		$data 			= create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
+		$data 			= create_data_nguonc($sourcePage, $url, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
 		if ($data['crawl_filter']) {
 			$result = array(
 				'status'				=> false,
@@ -1000,7 +1011,7 @@ function crawl_ophim_movies_handle($url, $ophim_id, $ophim_update_time, $filterT
 }
 
 // function create data nguonc ========================================================================================================
-function create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType = [], $filterCategory = [], $filterCountry = [])
+function create_data_nguonc($sourcePage, $url, $ophim_update_time, $filterType = [], $filterCategory = [], $filterCountry = [])
 {
 	// if(in_array($sourcePage["movie"]["type"], $filterType))  {
 	// 	return array(
@@ -1049,10 +1060,12 @@ function create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $f
 	if ($sourcePage["movie"]["name"] != $sourcePage["movie"]["original_name"]) array_push($arrTags, $sourcePage["movie"]["original_name"]);
 	$status = getStatusNguonc($sourcePage["movie"]["current_episode"]);
 	$content = sprintf('%s là một bộ phim %s  %s được sản xuất vào năm %s. %s', $sourcePage["movie"]["name"], $sourcePage["movie"]["category"]["2"]["list"][0]["name"], $sourcePage["movie"]["category"]["4"]["list"][0]["name"], $sourcePage["movie"]["category"]["3"]["list"][0]["name"], preg_replace('/\\r?\\n/s', '', $sourcePage["movie"]["description"]));
+	$schedule_list = json_decode(file_get_contents(MOVIE_SCHEDULE), true);
+	$show_time = $schedule_list[$sourcePage["movie"]["slug"]] ? $schedule_list[$sourcePage["movie"]["slug"]] :  "";
 	$data = array(
 		'crawl_filter'						=> false,
 		'fetch_url' 							=> $url,
-		'fetch_ophim_id' 					=> $ophim_id,
+		'fetch_ophim_id' 					=> $sourcePage["movie"]["id"],
 		'fetch_ophim_update_time' => $ophim_update_time,
 		'title'     							=> $sourcePage["movie"]["name"],
 		'org_title' 							=> $sourcePage["movie"]["original_name"],
@@ -1070,7 +1083,8 @@ function create_data_nguonc($sourcePage, $url, $ophim_id, $ophim_update_time, $f
 		'cat'											=> $arrCat,
 		'type'										=> $type,
 		'lang'										=> $sourcePage["movie"]["language"],
-		'showtime'								=> $sourcePage["movie"]["time"],
+		// 'showtime'								=> $sourcePage["movie"]["time"],
+		'showtime'								=> $show_time,
 		'year'										=> $sourcePage["movie"]["category"]["3"]["list"][0]["name"],
 		'status'									=> $status,
 		'duration'								=> $sourcePage["movie"]["time"],

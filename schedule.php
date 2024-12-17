@@ -7,6 +7,7 @@ set_time_limit(0);
 define('CRAWL_OPHIM_PATH', plugin_dir_path(__FILE__));
 define('CRAWL_OPHIM_PATH_SCHEDULE_JSON', CRAWL_OPHIM_PATH . 'schedule.json');
 define('CRAWL_OPHIM_PATH_SOURCE_JSON', CRAWL_OPHIM_PATH . 'schedule_source.json');
+
 require_once CRAWL_OPHIM_PATH . 'constant.php';
 
 if (!isset($argv[1])) return;
@@ -55,12 +56,13 @@ function Crawl_Nguonc($crawl_ophim_settings)
 				return;
 			}
 			// $result = crawl_ophim_page_handle(API_DOMAIN . "/danh-sach/phim-moi-cap-nhat?page=$i");
-			$result = crawl_ophim_page_handle_nguonc(API_NGUONC . "/api/films/the-loai/hoat-hinh?page=$i");
+			$uri_crawl= $crawl_ophim_settings->url_nguonc_post?$crawl_ophim_settings->url_nguonc_post: (API_NGUONC."/api/films/the-loai/hoat-hinh");
+			$result = crawl_ophim_page_handle_nguonc($uri_crawl."/?page=$i");
 			$result = explode("\n", $result);
 			$listMovies = array_merge($listMovies, $result);
+			
 		}
 		shuffle($listMovies);
-		
 		$countMovies = count($listMovies);
 		$countDone = 0;
 		$countStatus = array(0, 0, 0, 0, 0);
