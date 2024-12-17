@@ -507,6 +507,7 @@ const crawl_movies_nguonc = () => {
   $("#save_crawl_ophim_schedule").on("click", () => {
     let pageFrom = $("input[name=page_from]").val();
     let pageTo = $("input[name=page_to]").val();
+    let url_nguonc_post = $("input[name=url_nguonc_crawl]").val();
     let filterType = [];
     $("input[name='filter_type[]']:checked").each(function () {
       filterType.push($(this).val());
@@ -531,7 +532,8 @@ const crawl_movies_nguonc = () => {
         pageTo,
         filterType,
         filterCategory,
-        filterCountry
+        filterCountry,
+        url_nguonc_post
       },
       success: function (res) {
         alert("Lưu thành công!")
