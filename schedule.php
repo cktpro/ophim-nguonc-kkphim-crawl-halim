@@ -29,6 +29,7 @@ if (getEnable() === false) {
 if ((int) get_option(CRAWL_OPHIM_OPTION_RUNNING, 0) === 1) return;
 
 // Update Running
+update_option(CRAWL_OPHIM_OPTION_RUNNING, 1);
 switch (getEnableSource()) {
 	case 1:
 		Crawl_Ophim($crawl_ophim_settings);
@@ -76,9 +77,9 @@ function Crawl_Nguonc($crawl_ophim_settings)
 			}
 
 			$url 								= explode('|', $data_post)[0];
-			$ophim_id 					= explode('|', $data_post)[1];
-			$ophim_update_time 	= explode('|', $data_post)[2];
-			$result = crawl_ophim_movies_handle_nguonc($url, $ophim_id, $ophim_update_time, $crawl_ophim_settings->filterType, $crawl_ophim_settings->filterCategory, $crawl_ophim_settings->filterCountry);
+			// $ophim_id 					= explode('|', $data_post)[1];
+			$ophim_update_time 	= explode('|', $data_post)[1];
+			$result = crawl_ophim_movies_handle_nguonc($url, $ophim_update_time, $crawl_ophim_settings->filterType, $crawl_ophim_settings->filterCategory, $crawl_ophim_settings->filterCountry);
 			$result = json_decode($result);
 			if ($result->schedule_code == SCHEDULE_CRAWLER_TYPE_ERROR) write_log(sprintf("ERROR: %s ==>>> %s", $url, $result->msg));
 			$countStatus[$result->schedule_code]++;
