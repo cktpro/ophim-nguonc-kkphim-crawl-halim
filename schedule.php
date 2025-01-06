@@ -93,6 +93,8 @@ function Crawl_Nguonc($crawl_ophim_settings)
 	update_option(CRAWL_OPHIM_OPTION_RUNNING, 0);
 
 	write_log("Done {$countDone}/{$countMovies} movies (Nothing Update: {$countStatus[0]} | Insert: {$countStatus[1]} | Update: {$countStatus[2]} | Error: {$countStatus[3]} | Filter: {$countStatus[4]})");
+	$notify ="Done {$countDone}/{$countMovies} movies nguonc: \n Nothing Update: {$countStatus[0]} \n Insert: {$countStatus[1]} \n Update: {$countStatus[2]} \n Error: {$countStatus[3]} \n Filter: {$countStatus[4]}";
+	sendNotifiTelegram($notify);
 }
 function Crawl_KKPhim($crawl_ophim_settings)
 {
@@ -145,6 +147,8 @@ function Crawl_KKPhim($crawl_ophim_settings)
 	update_option(CRAWL_OPHIM_OPTION_RUNNING, 0);
 
 	write_log("Done {$countDone}/{$countMovies} movies (Nothing Update: {$countStatus[0]} | Insert: {$countStatus[1]} | Update: {$countStatus[2]} | Error: {$countStatus[3]} | Filter: {$countStatus[4]})");
+	$notify ="Done {$countDone}/{$countMovies} movies kkphim: \n Nothing Update: {$countStatus[0]} \n Insert: {$countStatus[1]} \n Update: {$countStatus[2]} \n Error: {$countStatus[3]} \n Filter: {$countStatus[4]}";
+	sendNotifiTelegram($notify);
 }
 function Crawl_OPhim($crawl_ophim_settings)
 {
@@ -197,7 +201,11 @@ function Crawl_OPhim($crawl_ophim_settings)
 	update_option(CRAWL_OPHIM_OPTION_RUNNING, 0);
 
 	write_log("Done {$countDone}/{$countMovies} movies (Nothing Update: {$countStatus[0]} | Insert: {$countStatus[1]} | Update: {$countStatus[2]} | Error: {$countStatus[3]} | Filter: {$countStatus[4]})");
+	$notify ="Done {$countDone}/{$countMovies} movies ophim: \n Nothing Update: {$countStatus[0]} \n Insert: {$countStatus[1]} \n Update: {$countStatus[2]} \n Error: {$countStatus[3]} \n Filter: {$countStatus[4]}";
+	sendNotifiTelegram($notify);
+	
 }
+
 
 // // Update Running
 
@@ -233,4 +241,42 @@ function write_log($log_msg, $new_line = "\n")
 	}
 	$log_file_data = $log_filename . '/log_' . date('d-m-Y') . '.log';
 	file_put_contents($log_file_data, '[' . date("d-m-Y H:i:s") . '] ' . $log_msg . $new_line, FILE_APPEND);
+}
+function sendNotifiTelegram($notify)
+{
+	$botToken = "7872689878:AAEKkbhnVAe7DR2-9vg5JgGknhH9ShXsWfQ"; // Token của bot
+	$chatId = "1997128476";     // ID chat
+	$message = "HH3DVIP Cập Nhật Phim Thành Công \n $notify"; // Nội dung tin nhắn
+
+	// URL gửi yêu cầu đến Telegram API
+	$url = "https://api.telegram.org/bot$botToken/sendMessage";
+
+	// Dữ liệu cần gửi
+	$data = [
+		'chat_id' => $chatId,
+		'text' => $message,
+	];
+
+	 // Chuyển dữ liệu thành JSON
+	 $options = [
+        'http' => [
+            'header'  => "Content-Type: application/json\r\n",
+            'method'  => 'POST',
+            'content' => json_encode($data),
+        ],
+    ];
+	$context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+
+	 // Kiểm tra kết quả
+	//  if ($response === FALSE) {
+    //     echo "Gửi tin nhắn thất bại.";
+    // } else {
+    //     $responseData = json_decode($response, true);
+    //     if ($responseData['ok']) {
+    //         echo "Tin nhắn đã được gửi!";
+    //     } else {
+    //         echo "Lỗi: " . $responseData['description'];
+    //     }
+    // }
 }
