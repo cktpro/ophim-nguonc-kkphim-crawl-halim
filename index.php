@@ -13,6 +13,7 @@ define('CRAWL_OPHIM_PATH_SCHEDULE_JSON', CRAWL_OPHIM_PATH . 'schedule.json');
 define('CRAWL_OPHIM_PATH_SOURCE_JSON', CRAWL_OPHIM_PATH . 'schedule_source.json');
 define('MOVIE_SCHEDULE', CRAWL_OPHIM_PATH . 'movie_schedule.json');
 require_once CRAWL_OPHIM_PATH . 'constant.php';
+require_once CRAWL_OPHIM_PATH . 'crawl_function.php';
 
 function crawl_tools_script()
 {

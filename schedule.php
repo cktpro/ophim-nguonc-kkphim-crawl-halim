@@ -14,7 +14,7 @@ if (!isset($argv[1])) return;
 if ($argv[1] != get_option(CRAWL_OPHIM_OPTION_SECRET_KEY, 'secret_key')) return;
 
 require_once CRAWL_OPHIM_PATH . 'functions.php';
-require_once CRAWL_OPHIM_PATH . 'crawl_movies.php';
+require_once CRAWL_OPHIM_PATH . 'crawl_function.php';
 
 // Get & Check Settings
 $crawl_ophim_settings = json_decode(get_option(CRAWL_OPHIM_OPTION_SETTINGS, false));
@@ -56,11 +56,10 @@ function Crawl_Nguonc($crawl_ophim_settings)
 				return;
 			}
 			// $result = crawl_ophim_page_handle(API_DOMAIN . "/danh-sach/phim-moi-cap-nhat?page=$i");
-			$uri_crawl= $crawl_ophim_settings->url_nguonc_post?$crawl_ophim_settings->url_nguonc_post: (API_NGUONC."/api/films/the-loai/hoat-hinh");
-			$result = crawl_ophim_page_handle_nguonc($uri_crawl."/?page=$i");
+			$uri_crawl = $crawl_ophim_settings->url_nguonc_post ? $crawl_ophim_settings->url_nguonc_post : (API_NGUONC . "/api/films/the-loai/hoat-hinh");
+			$result = crawl_ophim_page_handle_nguonc($uri_crawl . "/?page=$i");
 			$result = explode("\n", $result);
 			$listMovies = array_merge($listMovies, $result);
-			
 		}
 		shuffle($listMovies);
 		$countMovies = count($listMovies);
@@ -215,7 +214,7 @@ function getEnable()
 }
 function getEnableSource()
 {
-	$source_phim = json_decode(file_get_contents(CRAWL_OPHIM_PATH_SOURCE_JSON));
+	$source_phim = json_decode(file_get_contents(CRAWL_OPHIM_PATH_SCHEDULE_JSON));
 	if ($source_phim->enable_ophim) {
 		return 1;
 	} elseif ($source_phim->enable_kkphim) {
