@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Crawl Phim Tool
  * Description: Crawl + Update Dữ liệu từ OPhim1.CC KKPhim.vip Phim.Nguonc.com (WP - Halimthemes - 5.5.4)
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: roxone9
  * Author URI: https://t.me/roxone9
  */
